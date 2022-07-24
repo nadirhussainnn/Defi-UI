@@ -1,0 +1,44 @@
+.main-div {
+  min-height: 100vh;
+}
+
+.btn-parent {
+  display:flex;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.btn-parent > * {
+  margin: 20px;
+}
+.btn-img {
+  color: white;
+}
+.btn-top {
+  font-size: 30;
+  border: 0px;
+  color: white;
+  background-color: transparent;
+  font-size: larger;
+}
+
+.btn-container {
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+.btn-top:hover,
+.btn-img:hover,
+.btn-container {
+  cursor: pointer;
+}
+
+.btn-container:hover {
+  border-bottom: 2px solid green;
+}
+
+.color-mode-btn{
+    position: absolute;
+    right: 30px;
+    padding-top: 20px;
+}
