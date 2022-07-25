@@ -1,5 +1,9 @@
-import { Table } from "antd";
+import { Table, Grid } from "antd";
 import React, { useEffect, useState } from "react";
+import Chart from "./Chart";
+import "./styles/home.css";
+
+const { useBreakpoint } = Grid;
 
 const CryptoTable = () => {
   const [sortedInfo, setSortedInfo] = useState({});
@@ -9,37 +13,41 @@ const CryptoTable = () => {
     setSortedInfo(sorter);
   };
 
+  const screens = useBreakpoint();
+
   const columns = [
     {
       title: "#",
       dataIndex: "number",
       key: "number",
-      width: "80px",
+      width: screens.md?"80px":"40px",
       sorter: (a, b) => a.number - b.number,
       sortOrder: sortedInfo.columnKey === "number" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
+      render:(number)=><span className='table-entry'>{number}</span>,
     },
     {
       title: "Coin",
       dataIndex: "coin",
       key: "coin",
-      width: "300px",
+      width: screens.md?"300px":"110px",
       sorter: (a, b) => a.coin - b.coin,
       sortOrder: sortedInfo.columnKey === "coin" ? sortedInfo.order : null,
       ellipsis: true,
     
       render: (coin, obj) => {
-        console.log(obj)
         return (
           <div style={{display:'flex', justifyContent:'space-between'}}>
             <div style={{}}>
             <img src={obj.logo} width={30} height={30} alt="loading logo" />{" "}
-            <span style={{fontSize:18, paddingLeft:7}}>{coin}</span>
+            <span style={{fontSize:screens.xs?12:18, paddingLeft:7}} className='table-entry'>{coin}</span>
             </div>
-            <div>
-            <span style={{fontSize:18, position:'relative', right:'0px'}}>{obj.symbol}</span>
-            </div>
+            {
+                screens.md? <div>
+                <span style={{fontSize:18, position:'relative', right:'0px'}} className='table-entry'>{obj.symbol}</span>
+                </div>:''
+            }
           </div>
         );
       },
@@ -52,6 +60,7 @@ const CryptoTable = () => {
       sortOrder: sortedInfo.columnKey === "price" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
+      render:(price)=><span className='table-entry'>{price}</span>
     },
     {
       title: "24th Volume",
@@ -61,9 +70,10 @@ const CryptoTable = () => {
       sortOrder: sortedInfo.columnKey === "volume" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
+      render:(volume)=><span className='table-entry'>{volume}</span>
     },
     {
-      title: "mktCop",
+      title: "mkt Cop",
       dataIndex: "mktCop",
       key: "mktCop",
       sorter: (a, b) => a.mktCop.length - b.mktCop.length,
@@ -71,6 +81,7 @@ const CryptoTable = () => {
       ellipsis: true,
       align: "center",
       responsive: ["lg"],
+      render:(mktCop)=><span className='table-entry'>{mktCop}</span>
     },
     {
       title: "sevenDays",
@@ -79,6 +90,7 @@ const CryptoTable = () => {
       render: (data) => <h5>Ho</h5>,
       align: "center",
       responsive: ["lg"],
+      render:()=><Chart />
     },
   ];
 
@@ -92,7 +104,6 @@ const CryptoTable = () => {
     )
       .then((resp) => resp.json())
       .then(async (resp) => {
-        console.log(resp);
         await resp.map((currency, index) => {
           data.push({
             key: index,
@@ -102,37 +113,28 @@ const CryptoTable = () => {
             volume: "$" + currency["1d"].volume,
             mktCop: "$" + currency["1d"].market_cap_change,
             logo: currency.logo_url,
-            symbol:currency.symbol
-            // sevenDays:
+            symbol:currency.symbol,
           });
           return 0;
         });
 
         setCryptoData(data);
-
-        // const data = [
-        //   {
-        //     key: "1",
-        //     number: 1,
-        //     price: 32,
-        //     coin: "Bitcoin",
-        //     volume: "$1245120",
-        //     mktCop: "$41,25,47,84,120",
-        //     sevenDays: "$78454545",
-        //   },
-        // ];
       });
-  }, [cryptoData]);
+  }, [1]);
 
   return (
+
     <Table
       pagination={false}
       columns={columns}
+      className='ant-table-tbody'
       dataSource={cryptoData}
       onChange={handleChange}
-      style={{ backgroundColor: "black", marginBottom: "30px" }}
+      rowClassName='highlight-bottom-border'
+      sticky
     />
-  );
+
+    );
 };
 
 export default CryptoTable;

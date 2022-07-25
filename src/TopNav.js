@@ -1,19 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "./CustomButton";
 import "./styles/home.css";
 
-import { IoMdHome, IoMdWallet, IoMdColorFill } from "react-icons/io";
+import { IoMdHome, IoMdWallet } from "react-icons/io";
 import {MdLightMode} from 'react-icons/md'
 
-export default function TopNav() {
+export default function TopNav(props) {
+
+    function navigation(state){
+        props.navigation(state)
+    }
+
   return (
     <>
-    <div style={{display:'flex', justifyContent:'center', position:'relative'}}>
+    <div style={{display:'flex',  justifyContent:'center', position:'relative'}}>
     <div className="btn-parent">
-        <CustomButton title="Home">
+        <CustomButton title="Home"  navigation={navigation}>
           <IoMdHome size={20} className="btn-img"></IoMdHome>
         </CustomButton>
-        <CustomButton title="Wallets">
+        <CustomButton title="Wallet" navigation={navigation}>
           <IoMdWallet size={20} className="btn-img"></IoMdWallet>
         </CustomButton>
       </div>
