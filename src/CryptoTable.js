@@ -1,4 +1,4 @@
-import { Button, Space, Table } from "antd";
+import { Table } from "antd";
 import React, { useEffect, useState } from "react";
 
 const CryptoTable = () => {
@@ -66,7 +66,7 @@ const CryptoTable = () => {
       title: "mktCop",
       dataIndex: "mktCop",
       key: "mktCop",
-      sorter: (a, b) => a.mktCop - b.mktCop,
+      sorter: (a, b) => a.mktCop.length - b.mktCop.length,
       sortOrder: sortedInfo.columnKey === "mktCop" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
