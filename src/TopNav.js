@@ -3,6 +3,7 @@ import CustomButton from "./CustomButton";
 import "./styles/home.css";
 
 import { IoMdHome, IoMdWallet, IoMdColorFill } from "react-icons/io";
+import {MdLightMode} from 'react-icons/md'
 
 export default function TopNav() {
   return (
@@ -17,7 +18,7 @@ export default function TopNav() {
         </CustomButton>
       </div>
       <div className="color-mode-btn">
-      <IoMdColorFill size={20} className="btn-img"></IoMdColorFill>
+      <MdLightMode size={20} className="btn-img"></MdLightMode>
       </div>
     </div>
 

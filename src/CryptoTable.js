@@ -105,6 +105,7 @@ const CryptoTable = () => {
             symbol:currency.symbol
             // sevenDays:
           });
+          return 0;
         });
 
         setCryptoData(data);
@@ -121,7 +122,7 @@ const CryptoTable = () => {
         //   },
         // ];
       });
-  }, []);
+  }, [cryptoData]);
 
   return (
     <Table
