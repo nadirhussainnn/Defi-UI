@@ -1,7 +1,12 @@
+/**
+ * @author Nadir
+ * @version 1.0
+ */
+
 import { Table, Grid } from "antd";
 import React, { useEffect, useState } from "react";
 import Chart from "./Chart";
-import "./styles/home.css";
+import "./styles/styles.css";
 
 const { useBreakpoint } = Grid;
 
@@ -20,34 +25,46 @@ const CryptoTable = () => {
       title: "#",
       dataIndex: "number",
       key: "number",
-      width: screens.md?"80px":"40px",
+      width: screens.md ? "80px" : "40px",
       sorter: (a, b) => a.number - b.number,
       sortOrder: sortedInfo.columnKey === "number" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
-      render:(number)=><span className='table-entry'>{number}</span>,
+      render: (number) => <span className="table-entry">{number}</span>,
     },
     {
       title: "Coin",
       dataIndex: "coin",
       key: "coin",
-      width: screens.md?"300px":"110px",
+      width: screens.md ? "300px" : "110px",
       sorter: (a, b) => a.coin - b.coin,
       sortOrder: sortedInfo.columnKey === "coin" ? sortedInfo.order : null,
       ellipsis: true,
-    
+
       render: (coin, obj) => {
         return (
-          <div style={{display:'flex', justifyContent:'space-between'}}>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div style={{}}>
-            <img src={obj.logo} width={30} height={30} alt="loading logo" />{" "}
-            <span style={{fontSize:screens.xs?12:18, paddingLeft:7}} className='table-entry'>{coin}</span>
+              <img src={obj.logo} width={30} height={30} alt="loading logo" />{" "}
+              <span
+                style={{ fontSize: screens.xs ? 12 : 18, paddingLeft: 7 }}
+                className="table-entry"
+              >
+                {coin}
+              </span>
             </div>
-            {
-                screens.md? <div>
-                <span style={{fontSize:18, position:'relative', right:'0px'}} className='table-entry'>{obj.symbol}</span>
-                </div>:''
-            }
+            {screens.md ? (
+              <div>
+                <span
+                  style={{ fontSize: 18, position: "relative", right: "0px" }}
+                  className="table-entry"
+                >
+                  {obj.symbol}
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         );
       },
@@ -60,7 +77,7 @@ const CryptoTable = () => {
       sortOrder: sortedInfo.columnKey === "price" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
-      render:(price)=><span className='table-entry'>{price}</span>
+      render: (price) => <span className="table-entry">$ {price}</span>,
     },
     {
       title: "24th Volume",
@@ -70,7 +87,7 @@ const CryptoTable = () => {
       sortOrder: sortedInfo.columnKey === "volume" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
-      render:(volume)=><span className='table-entry'>{volume}</span>
+      render: (volume) => <span className="table-entry">$ {volume}</span>,
     },
     {
       title: "mkt Cop",
@@ -81,15 +98,16 @@ const CryptoTable = () => {
       ellipsis: true,
       align: "center",
       responsive: ["lg"],
-      render:(mktCop)=><span className='table-entry'>{mktCop}</span>
+      render: (mktCop) => <span className="table-entry">$ {mktCop}</span>,
     },
+    
     {
       title: "sevenDays",
       dataIndex: "sevenDays",
       key: "sevenDays",
       align: "center",
       responsive: ["lg"],
-      render:(sevenDays)=><Chart index={sevenDays}/>
+      render: (sevenDays) => <Chart index={sevenDays} />,
     },
   ];
 
@@ -108,12 +126,12 @@ const CryptoTable = () => {
             key: index,
             number: index + 1,
             coin: currency.name,
-            price: "$" + currency.price,
-            volume: "$" + currency["1d"].volume,
-            mktCop: "$" + currency["1d"].market_cap_change,
+            price: currency.price,
+            volume: currency["1d"].volume,
+            mktCop: currency["1d"].market_cap_change,
             logo: currency.logo_url,
-            symbol:currency.symbol,
-            sevenDays:index
+            symbol: currency.symbol,
+            sevenDays: index,
           });
           return 0;
         });
@@ -123,18 +141,16 @@ const CryptoTable = () => {
   }, [1]);
 
   return (
-
     <Table
       pagination={false}
       columns={columns}
-      className='ant-table-tbody'
+      className="ant-table-tbody"
       dataSource={cryptoData}
       onChange={handleChange}
-      rowClassName='highlight-bottom-border'
+      rowClassName="highlight-bottom-border"
       sticky
     />
-
-    );
+  );
 };
 
 export default CryptoTable;

@@ -1,79 +1,52 @@
-import React, { useState, useEffect } from "react";
+/**
+ * @author Nadir
+ * @version 1.0
+ */
+
+import React, { useState } from "react";
 import { Button, Modal, Space, Divider, Select } from "antd";
 
 import metamask_ic from "./assets/images/metamask.png";
-import "./styles/home.css";
 import { ethers } from "ethers";
-import Web3Modal from "web3modal";
 import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
-import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
 import { toHex, truncateAddress } from "./utils";
 import { networkParams } from "./networks";
 import Balance from "./Balance";
 
+import "./styles/styles.css";
+
 const { Option } = Select;
 
-const infura_api_key = "dc70d6bddf4748af956f653043b2cd70";
-
-const providerOptions = {
-  coinbasewallet: {
-    package: CoinbaseWalletSDK,
-    options: {
-      appName: "Metamask",
-      infuraId: { 3: `https://ropsten.infura.io/v3/${infura_api_key}` },
-    },
-  },
-};
-
 export default function Wallet() {
-  const [visible, setVisible] = useState(false); //For Modal
-  const [networkModal, setNetworkModal] = useState(false);
+    
+    //State variables
 
+  const [visible, setVisible] = useState(false);
+  const [networkModal, setNetworkModal] = useState(false);
   const [provider, setProvider] = useState(null);
   const [balance, setBalance] = useState(0);
-
-  const [instance, setInstance] = useState();
   const [account, setAccount] = useState();
-  const [error, setError] = useState("");
-  const [chainId, setChainId] = useState();
-  const [network, setNetwork] = useState();
 
-  const web3Modal = new Web3Modal({
-    cacheProvider: true, // optional
-    providerOptions, // required
-  });
-
-  useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      connectWallet();
-    }
-  }, []);
-
+  //Helper functions
 
   async function connectWallet() {
     try {
-      const instance = await web3Modal.connect();
-      const provider = new ethers.providers.JsonRpcProvider(ethers.getDefaultProvider());
+  
+      if (window.ethereum) {
+        
+        window.ethereum.enable();
 
-      console.log(provider)
-      if (provider) {
-        // const balance = await provider.getBalance(
-        //   provider.provider.selectedAddress
-        // );
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = await provider.getSigner();
+        const currentAddress = await signer.getAddress();
+        const balance = await signer.getBalance();
 
-        // const accounts = await provider.listAccounts();
-        // const network = await provider.getNetwork();
+        setBalance(balance);
+        setAccount(currentAddress);
+        setProvider(provider);
+        setVisible(true); 
 
-        // if (accounts) {
-        //   setAccount(provider.provider.selectedAddress);
-        // }
-
-        // setChainId(network.chainId); //Network chainId
-        // setBalance(balance); //Selected Account balance
-        // setInstance(instance); //Provider instance
-        // setProvider(provider); //Provider
-        // setVisible(true); //Display Modal
       }
     } catch (error) {
       console.error(error);
@@ -82,23 +55,11 @@ export default function Wallet() {
 
   function buyCrypto() {
     console.log("Buy");
-  }
+
+ }
   function sendCrypto() {
     console.log("Send");
-  }
-
-  //To disconnect
-
-  const refreshState = () => {
-    setAccount();
-    setChainId();
-    setNetwork("");
-  };
-
-  const disconnect = async () => {
-    await web3Modal.clearCachedProvider();
-    refreshState();
-  };
+}
 
   function copyAddress() {
     if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
@@ -114,36 +75,34 @@ export default function Wallet() {
   };
 
   const handleNetwork = async (value) => {
-    await setNetwork(Number(value));
-    switchNetwork();
-  };
 
-  async function switchNetwork() {
     try {
-      await provider.provider.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: toHex(network) }],
-      });
+      
+        await provider.provider.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: toHex(value) }],
+        });
+
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
           await provider.provider.request({
             method: "wallet_addEthereumChain",
-            params: [networkParams[toHex(network)]],
+            params: [networkParams[toHex(value)]],
           });
         } catch (error) {
-          setError(error);
+          console.error(error);
         }
       }
     }
     setNetworkModal(false);
-  }
+  };
 
   return (
     <div style={{ textAlign: "center", marginTop: "30px" }}>
       <div style={{ justifyContent: "center" }}>
         <img src={metamask_ic} width={100} height={100} alt="Loading icon" />
-        <h1 style={{ fontSize: "40px", color: "white" }}>METAMASK</h1>
+        <h1 style={{ fontSize: "40px", color: "white" }}>METAMASK - </h1>
         <Button
           style={{
             backgroundColor: "#01aa58",
@@ -253,7 +212,7 @@ export default function Wallet() {
                     Send
                   </Button>
                 </div>
-              <Balance address={account}/>
+                <Balance address={account} />
               </div>
             </div>
           ) : (

@@ -62,3 +62,9 @@
 .bg-success {
   background-color: #70c040;
 }
+
+.linechart_path {
+  stroke-width: 6;
+  fill: none;    
+}
+

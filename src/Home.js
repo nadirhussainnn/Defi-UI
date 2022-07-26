@@ -1,6 +1,10 @@
+/**
+ * @author Nadir
+ * @version 1.0
+ */
+
 import React, { useState } from "react";
 import TopNav from "./TopNav";
-
 import { colors } from "./theme/colors";
 import CryptoTable from "./CryptoTable";
 import { Row, Col } from "antd";
