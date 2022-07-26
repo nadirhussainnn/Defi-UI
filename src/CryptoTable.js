@@ -87,10 +87,9 @@ const CryptoTable = () => {
       title: "sevenDays",
       dataIndex: "sevenDays",
       key: "sevenDays",
-      render: (data) => <h5>Ho</h5>,
       align: "center",
       responsive: ["lg"],
-      render:()=><Chart />
+      render:(sevenDays)=><Chart index={sevenDays}/>
     },
   ];
 
@@ -114,6 +113,7 @@ const CryptoTable = () => {
             mktCop: "$" + currency["1d"].market_cap_change,
             logo: currency.logo_url,
             symbol:currency.symbol,
+            sevenDays:index
           });
           return 0;
         });

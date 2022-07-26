@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Routes, Route } from 'react-router-dom'
-import Chart from './Chart'
 import Error from './Error'
 import Home from './Home'
 
