@@ -9,37 +9,35 @@ import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
 import { CoinbaseWalletSDK } from "@coinbase/wallet-sdk";
 import { toHex, truncateAddress } from "./utils";
+import { networkParams } from "./networks";
+import Balance from "./Balance";
 
 const { Option } = Select;
 
 const infura_api_key = "dc70d6bddf4748af956f653043b2cd70";
 
 const providerOptions = {
-  //   coinbasewallet:{
-  //       package:CoinbaseWalletSDK,
-  //       options:{
-  //           appName:'Metamask',
-  //           infuraId:{3:`https://ropsten.infura.io/v3/${infura_api_key}`}
-  //       }
-  //   },
+  coinbasewallet: {
+    package: CoinbaseWalletSDK,
+    options: {
+      appName: "Metamask",
+      infuraId: { 3: `https://ropsten.infura.io/v3/${infura_api_key}` },
+    },
+  },
 };
 
 export default function Wallet() {
   const [visible, setVisible] = useState(false); //For Modal
-  const [networkModal, setNetworkModal]=useState(false)
+  const [networkModal, setNetworkModal] = useState(false);
 
   const [provider, setProvider] = useState(null);
   const [balance, setBalance] = useState(0);
 
   const [instance, setInstance] = useState();
   const [account, setAccount] = useState();
-  const [signature, setSignature] = useState("");
   const [error, setError] = useState("");
   const [chainId, setChainId] = useState();
   const [network, setNetwork] = useState();
-  const [message, setMessage] = useState("");
-  const [signedMessage, setSignedMessage] = useState("");
-  const [verified, setVerified] = useState();
 
   const web3Modal = new Web3Modal({
     cacheProvider: true, // optional
@@ -52,69 +50,35 @@ export default function Wallet() {
     }
   }, []);
 
-  useEffect(() => {
-    if (provider?.on) {
-      const handleAccountsChanged = (accounts) => {
-        console.log("accountsChanged", accounts);
-        if (accounts) setAccount(accounts[0]);
-      };
-
-      const handleChainChanged = (_hexChainId) => {
-        console.log("Chain ID");
-        setChainId(_hexChainId);
-      };
-
-      const handleDisconnect = () => {
-        console.log("disconnect", error);
-        disconnect();
-      };
-
-      provider.on("accountsChanged", handleAccountsChanged);
-      provider.on("chainChanged", handleChainChanged);
-      provider.on("disconnect", handleDisconnect);
-
-      return () => {
-        if (provider.removeListener) {
-          provider.removeListener("accountsChanged", handleAccountsChanged);
-          provider.removeListener("chainChanged", handleChainChanged);
-          provider.removeListener("disconnect", handleDisconnect);
-        }
-      };
-    }
-  }, [provider]);
 
   async function connectWallet() {
     try {
       const instance = await web3Modal.connect();
-      const provider = new ethers.providers.Web3Provider(instance);
+      const provider = new ethers.providers.JsonRpcProvider(ethers.getDefaultProvider());
 
+      console.log(provider)
       if (provider) {
-        const balance = await provider.getBalance(
-          provider.provider.selectedAddress
-        );
+        // const balance = await provider.getBalance(
+        //   provider.provider.selectedAddress
+        // );
 
-        const accounts = await provider.listAccounts();
-        const network = await provider.getNetwork();
+        // const accounts = await provider.listAccounts();
+        // const network = await provider.getNetwork();
 
-        if (accounts) {
-          setAccount(accounts[0]);
-        }
+        // if (accounts) {
+        //   setAccount(provider.provider.selectedAddress);
+        // }
 
-        setChainId(network.chainId); //Network chainId
-        setBalance(balance); //Selected Account balance
-        setInstance(instance); //Provider instance
-        setProvider(provider); //Provider
-        setVisible(true); //Display Modal
+        // setChainId(network.chainId); //Network chainId
+        // setBalance(balance); //Selected Account balance
+        // setInstance(instance); //Provider instance
+        // setProvider(provider); //Provider
+        // setVisible(true); //Display Modal
       }
     } catch (error) {
       console.error(error);
     }
   }
-
-  //   const handleNetwork = (e) => {
-  //     const id = e.target.value;
-  //     setNetwork(Number(id));
-  //   };
 
   function buyCrypto() {
     console.log("Buy");
@@ -136,13 +100,22 @@ export default function Wallet() {
     refreshState();
   };
 
-  function copyAddress() {}
+  function copyAddress() {
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(account);
+    }
+
+    return Promise.reject("The Clipboard API is not available.");
+  }
 
   //Switch Network when clicked on Switch btn
+  const displayNetworkSelectionModal = () => {
+    setNetworkModal(true);
+  };
 
-  const handleNetwork = (e) => {
-    const id = e.target.value;
-    setNetwork(Number(id));
+  const handleNetwork = async (value) => {
+    await setNetwork(Number(value));
+    switchNetwork();
   };
 
   async function switchNetwork() {
@@ -156,14 +129,14 @@ export default function Wallet() {
         try {
           await provider.provider.request({
             method: "wallet_addEthereumChain",
-            params: [{ chainId: toHex(network) }],
+            params: [networkParams[toHex(network)]],
           });
         } catch (error) {
           setError(error);
         }
       }
     }
-    setNetworkModal(true)
+    setNetworkModal(false);
   }
 
   return (
@@ -180,7 +153,7 @@ export default function Wallet() {
           }}
           onClick={connectWallet}
         >
-          {account ? "Disconnect Wallet" : "Connect Wallet"}
+          Connect Wallet
         </Button>
 
         <Modal
@@ -233,7 +206,7 @@ export default function Wallet() {
                     style={{ marginRight: "10px" }}
                     onClick={copyAddress}
                   />
-                  <IoMdOpen size={25} onClick={switchNetwork} />
+                  <IoMdOpen size={25} onClick={displayNetworkSelectionModal} />
                 </div>
               </div>
 
@@ -280,6 +253,7 @@ export default function Wallet() {
                     Send
                   </Button>
                 </div>
+              <Balance address={account}/>
               </div>
             </div>
           ) : (
@@ -300,12 +274,14 @@ export default function Wallet() {
             <Select
               placeholder="Select Natwork"
               onChange={handleNetwork}
-              style={{width:250}}
+              style={{ width: 250 }}
             >
               <Option value="1">Main Net</Option>
               <Option value="4">Rinkeby</Option>
               <Option value="3">Ropsten</Option>
               <Option value="42">Kovan</Option>
+              <Option value="1666600000">Harmony</Option>
+              <Option value="42220">Celo</Option>
             </Select>
           </div>
         </Modal>
