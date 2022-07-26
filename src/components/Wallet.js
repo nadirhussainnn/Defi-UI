@@ -6,15 +6,15 @@
 import React, { useState } from "react";
 import { Button, Modal, Space, Divider, Select } from "antd";
 
-import metamask_ic from "./assets/images/metamask.png";
+import metamask_ic from '../assets/images/metamask.png'
 import { ethers } from "ethers";
 import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
-import { toHex, truncateAddress } from "./utils";
-import { networkParams } from "./networks";
-import Balance from "./Balance";
+import { toHex, truncateAddress } from '../utils/utils'
+import { networkParams } from "../utils/networks";
+import BalanceList from "./BalanceList";
 
-import "./styles/styles.css";
+import "../styles/styles.css";
 
 const { Option } = Select;
 
@@ -102,7 +102,7 @@ export default function Wallet() {
     <div style={{ textAlign: "center", marginTop: "30px" }}>
       <div style={{ justifyContent: "center" }}>
         <img src={metamask_ic} width={100} height={100} alt="Loading icon" />
-        <h1 style={{ fontSize: "40px", color: "white" }}>METAMASK - </h1>
+        <h1 className="metamask-heading">METAMASK - </h1>
         <Button
           style={{
             backgroundColor: "#01aa58",
@@ -120,9 +120,10 @@ export default function Wallet() {
           visible={visible}
           onOk={() => setVisible(false)}
           onCancel={() => setVisible(false)}
-          width={"75%"}
+          width={700}
           footer={null}
           closable={false}
+          className="modal-bg"
         >
           <div
             style={{
@@ -144,7 +145,7 @@ export default function Wallet() {
             </span>
           </div>
           <Space direction="vertical" />
-          <Divider className="margin-top-10" />
+          <Divider className="margin-top-10 antd-divider"/>
 
           {account ? (
             <div>
@@ -174,10 +175,12 @@ export default function Wallet() {
                   <span>Total Balance</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                  <span>
-                    <b>${balance.toString()}</b>
+                  <span style={{fontSize:30}}>
+                    {/* <b>${balance.toString()}</b> */}
+                    <b>$4000 </b>
+                    
                   </span>
-                  <IoMdEye size={25} style={{ marginLeft: "5px" }} />
+                  <IoMdEye size={30} style={{ marginLeft: "5px", marginTop:'10px' }} />
                 </div>
                 <div
                   style={{
@@ -212,7 +215,7 @@ export default function Wallet() {
                     Send
                   </Button>
                 </div>
-                <Balance address={account} />
+                <BalanceList address={account} />
               </div>
             </div>
           ) : (

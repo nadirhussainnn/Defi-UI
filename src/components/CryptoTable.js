@@ -6,7 +6,7 @@
 import { Table, Grid } from "antd";
 import React, { useEffect, useState } from "react";
 import Chart from "./Chart";
-import "./styles/styles.css";
+import "../styles/styles.css";
 
 const { useBreakpoint } = Grid;
 

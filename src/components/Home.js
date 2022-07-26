@@ -5,7 +5,7 @@
 
 import React, { useState } from "react";
 import TopNav from "./TopNav";
-import { colors } from "./theme/colors";
+import { colors } from "../theme/colors";
 import CryptoTable from "./CryptoTable";
 import { Row, Col } from "antd";
 import Wallet from "./Wallet";
@@ -17,7 +17,7 @@ export default function Home() {
     setDisplayWallet(state);
   }
   return (
-    <div className="main-div" style={{ backgroundColor: colors.dark }}>
+    <div className="main-div">
       <TopNav navigation={navigation} />
       {displayWallet ? (
         <Row style={{ justifyContent: "center" }}>

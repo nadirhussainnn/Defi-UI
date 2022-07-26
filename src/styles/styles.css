@@ -1,5 +1,30 @@
+.light-theme{
+  --btn-color: #000000;
+  --tablebackground-color: #FFFFFF;
+  --tableentry-color: #121418;
+  --background-color: #FFFFFF;
+  --tableheader-color:#121418;
+  --metamask-heading-color: #000000;
+  --modal-background:'#FFFFFF';
+  --divider-color:'#FFFFFF';
+}
+
+.dark-theme{
+  --btn-color: #FFFFFF;
+  --tablebackground-color: #121418;
+  --tableentry-color:  #FFFFFF;
+  --background-color: #121418;
+  --tableheader-color:#FFFFFF;
+  --metamask-heading-color: #FFFFFF;
+  --modal-background:'#FFFFFF';
+  --modal-background:'#121418';
+  --divider-color:'#121418';
+  
+}
+
 .main-div {
   min-height: 100vh;
+  background-color: var(--background-color);
 }
 
 .btn-parent {
@@ -12,12 +37,12 @@
   margin: 20px;
 }
 .btn-img {
-  color: white;
+  color: var(--btn-color);
 }
 .btn-top {
   font-size: 30;
   border: 0px;
-  color: white;
+  color: var(--btn-color);
   background-color: transparent;
   font-size: larger;
 }
@@ -45,14 +70,21 @@
 }
 
 .ant-table-tbody {
-  background: #121418 !important;
+  background: var(--tablebackground-color) !important;
 }
+
+.ant-table-thead .ant-table-cell {
+  background-color: var(--tablebackground-color) !important;
+  color: var(--tableheader-color);
+  border-color: #808080;
+}
+
 .table-entry {
-  color: white;
+  color: var(--tableentry-color);
 }
 
 .highlight-bottom-border > td {
-  border-bottom: solid 1px black !important;
+  border-bottom: solid 1px #808080 !important;
 }
 
 .highlight-bottom-border:hover td {
@@ -61,6 +93,18 @@
 
 .bg-success {
   background-color: #70c040;
+}
+
+.metamask-heading {
+  font-size: "40px";
+     color: var(--metamask-heading-color);
+}
+.modal-bg .ant-modal-header{
+  background-color: var(--modal-background) !important;
+}
+
+.antd-divider{
+  background-color: var(--divider-color) !important;
 }
 
 .linechart_path {

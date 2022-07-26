@@ -5,8 +5,8 @@
 
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Error from "./Error";
-import Home from "./Home";
+import Error from "./components/Error";
+import Home from "./components/Home";
 
 export default function App() {
   return (

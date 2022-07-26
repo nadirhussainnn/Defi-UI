@@ -1,4 +1,4 @@
-//Other networks , not available by default
+//Other Test networks , not available by default
 
 export const networkParams = {
     "0x63564c40": {
