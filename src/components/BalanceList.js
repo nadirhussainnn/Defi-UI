@@ -8,20 +8,8 @@ import eth_ic from "../assets/images/ethereum.png";
 import weth_ic from "../assets/images/weth.png";
 
 export default function BalanceList({ address }) {
-  // const [transactions, setTransactions] = useState(null);
 
-  address = "0x1dD1619Ca2632292aE6238E5332043B29EFB7DC8";
-
-  // useEffect(() => {
-  //   fetch(
-  //     `https://api.covalenthq.com/v1/42/address/${address}/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&key=ckey_57190a3cdb714746a75e1d39732`
-  //   )
-  //     .then((resp) => resp.json())
-  //     .then((resp) => {
-  //       // setTransactions(resp.data.items);
-  //       // console.log(resp.data.items);
-  //     });
-  // });
+  address = "0x1dD1619Ca2632292aE6238E5332043B29EFB7DC8"; //This address is expected from metamask wallet
 
   const data = [
     {
