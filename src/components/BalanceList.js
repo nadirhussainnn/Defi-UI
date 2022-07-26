@@ -2,25 +2,26 @@
  * @author Nadir
  * @version 1.0
  */
-import React, { useEffect, useState } from "react";
+
+import React from "react";
 import eth_ic from "../assets/images/ethereum.png";
 import weth_ic from "../assets/images/weth.png";
 
 export default function BalanceList({ address }) {
-  const [transactions, setTransactions] = useState(null);
+  // const [transactions, setTransactions] = useState(null);
 
   address = "0x1dD1619Ca2632292aE6238E5332043B29EFB7DC8";
 
-  useEffect(() => {
-    fetch(
-      `https://api.covalenthq.com/v1/42/address/${address}/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&key=ckey_57190a3cdb714746a75e1d39732`
-    )
-      .then((resp) => resp.json())
-      .then((resp) => {
-        setTransactions(resp.data.items);
-        console.log(resp.data.items);
-      });
-  }, []);
+  // useEffect(() => {
+  //   fetch(
+  //     `https://api.covalenthq.com/v1/42/address/${address}/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=false&no-logs=false&key=ckey_57190a3cdb714746a75e1d39732`
+  //   )
+  //     .then((resp) => resp.json())
+  //     .then((resp) => {
+  //       // setTransactions(resp.data.items);
+  //       // console.log(resp.data.items);
+  //     });
+  // });
 
   const data = [
     {
@@ -67,7 +68,9 @@ const Item = ({ item }) => {
       <div style={{ display: "flex" }}>
         <img src={item.icon} width={40} height={40} alt="icon"></img>
         <div style={{ marginLeft: "15px" }}>
-          <h3 style={{ fontWeight: "bold", textAlign:'left' }}>{item.symbol}</h3>
+          <h3 style={{ fontWeight: "bold", textAlign: "left" }}>
+            {item.symbol}
+          </h3>
           <h5 style={{ left: "10px", marginTop: "-10px" }}>{item.name}</h5>
         </div>
       </div>

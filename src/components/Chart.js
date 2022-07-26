@@ -31,9 +31,6 @@ class Chart extends Component {
         "2022-07-08": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
         "2022-07-09": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
         "2022-07-10": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
-        "2022-07-08": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
-        "2022-07-09": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
-        "2022-07-10": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
         "2022-07-11": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
         "2022-07-12": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
         "2022-07-13": Math.floor(Math.random() * (1000 - 990 + 1) + 990),
@@ -77,7 +74,7 @@ class Chart extends Component {
   }
   render() {
     return (
-      <div className="container">
+      <div className="container" onClick={this.props.onClick}>
         {!this.state.fetchingData ? (
           <LineChart data={this.state.data} index={this.props.index} />
         ) : null}

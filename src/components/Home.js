@@ -5,7 +5,6 @@
 
 import React, { useState } from "react";
 import TopNav from "./TopNav";
-import { colors } from "../theme/colors";
 import CryptoTable from "./CryptoTable";
 import { Row, Col } from "antd";
 import Wallet from "./Wallet";

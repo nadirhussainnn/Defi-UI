@@ -6,11 +6,11 @@
 import React, { useState } from "react";
 import { Button, Modal, Space, Divider, Select } from "antd";
 
-import metamask_ic from '../assets/images/metamask.png'
+import metamask_ic from "../assets/images/metamask.png";
 import { ethers } from "ethers";
 import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
-import { toHex, truncateAddress } from '../utils/utils'
+import { toHex, truncateAddress } from "../utils/utils";
 import { networkParams } from "../utils/networks";
 import BalanceList from "./BalanceList";
 
@@ -19,8 +19,7 @@ import "../styles/styles.css";
 const { Option } = Select;
 
 export default function Wallet() {
-    
-    //State variables
+  //State variables
 
   const [visible, setVisible] = useState(false);
   const [networkModal, setNetworkModal] = useState(false);
@@ -32,9 +31,7 @@ export default function Wallet() {
 
   async function connectWallet() {
     try {
-  
       if (window.ethereum) {
-        
         window.ethereum.enable();
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -45,8 +42,7 @@ export default function Wallet() {
         setBalance(balance);
         setAccount(currentAddress);
         setProvider(provider);
-        setVisible(true); 
-
+        setVisible(true);
       }
     } catch (error) {
       console.error(error);
@@ -54,12 +50,11 @@ export default function Wallet() {
   }
 
   function buyCrypto() {
-    console.log("Buy");
-
- }
+    console.log(`Available balance is ${balance}`);
+  }
   function sendCrypto() {
-    console.log("Send");
-}
+    console.log(`Available balance is ${balance}`);
+  }
 
   function copyAddress() {
     if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
@@ -75,14 +70,11 @@ export default function Wallet() {
   };
 
   const handleNetwork = async (value) => {
-
     try {
-      
-        await provider.provider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: toHex(value) }],
-        });
-
+      await provider.provider.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: toHex(value) }],
+      });
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
@@ -145,7 +137,7 @@ export default function Wallet() {
             </span>
           </div>
           <Space direction="vertical" />
-          <Divider className="margin-top-10 antd-divider"/>
+          <Divider className="margin-top-10 antd-divider" />
 
           {account ? (
             <div>
@@ -175,12 +167,14 @@ export default function Wallet() {
                   <span>Total Balance</span>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                  <span style={{fontSize:30}}>
+                  <span style={{ fontSize: 30 }}>
                     {/* <b>${balance.toString()}</b> */}
                     <b>$4000 </b>
-                    
                   </span>
-                  <IoMdEye size={30} style={{ marginLeft: "5px", marginTop:'10px' }} />
+                  <IoMdEye
+                    size={30}
+                    style={{ marginLeft: "5px", marginTop: "10px" }}
+                  />
                 </div>
                 <div
                   style={{

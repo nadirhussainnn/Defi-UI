@@ -5,6 +5,7 @@
 
 import { Table, Grid } from "antd";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Chart from "./Chart";
 import "../styles/styles.css";
 
@@ -12,11 +13,17 @@ const { useBreakpoint } = Grid;
 
 const CryptoTable = () => {
   const [sortedInfo, setSortedInfo] = useState({});
+  const navigator=useNavigate()
 
   const handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", filters, sorter);
     setSortedInfo(sorter);
   };
+
+  //When clicked on chart
+  function displayBoxPlot(){
+    navigator('/box-plot')  
+  }
 
   const screens = useBreakpoint();
 
@@ -107,7 +114,7 @@ const CryptoTable = () => {
       key: "sevenDays",
       align: "center",
       responsive: ["lg"],
-      render: (sevenDays) => <Chart index={sevenDays} />,
+      render: (sevenDays) => <Chart index={sevenDays} onClick={displayBoxPlot}/>,
     },
   ];
 
@@ -138,7 +145,7 @@ const CryptoTable = () => {
 
         setCryptoData(data);
       });
-  }, [1]);
+  });
 
   return (
     <Table

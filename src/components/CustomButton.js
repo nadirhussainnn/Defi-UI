@@ -16,7 +16,7 @@ export default function CustomButton(props) {
         <button
           className="btn-top"
           onClick={() => {
-            title == "Wallet"
+            title === "Wallet"
               ? props.navigation(true)
               : props.navigation(false);
           }}

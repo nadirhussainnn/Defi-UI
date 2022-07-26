@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function FullGraph() {
+export default function BoxPlot() {
   return (
     <div>FullGraph</div>
   )

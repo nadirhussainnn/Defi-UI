@@ -52,7 +52,7 @@ export default class LineChart extends Component {
       <path
         className="linechart_path"
         d={pathD}
-        style={{ stroke: index % 2 == 0 ? "#70c040" : "#FF0000" }}
+        style={{ stroke: index % 2 === 0 ? "#70c040" : "#FF0000" }}
       />
     );
   }
