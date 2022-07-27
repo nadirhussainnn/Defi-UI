@@ -125,7 +125,9 @@ const CryptoTable = () => {
   useEffect(() => {
 
     fetch(
-      `https://api.nomics.com/v1/currencies/ticker?key=${process.env.REACT_APP_CRYPTO_API}`
+      `https://api.nomics.com/v1/currencies/ticker?key=${process.env.REACT_APP_CRYPTO_API}`,{
+        mode:'no-cors'
+      }
     )
       .then((resp) => resp.json())
       .then(async (resp) => {
