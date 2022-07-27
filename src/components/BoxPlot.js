@@ -8,17 +8,20 @@ import { createChart } from "lightweight-charts";
 import { data } from "./static-data.js";
 import { IoMdArrowBack } from "react-icons/io";
 import { MdLightMode } from "react-icons/md";
-import { Row, Col } from "antd";
+import { Row, Col, Grid } from "antd";
 import "../styles/styles.css";
 import { useNavigate } from "react-router-dom";
+
+const { useBreakpoint } = Grid;
 
 export default function BoxPlot() {
   const [theme, setTheme] = useState("light-theme");
   const [navBtns, setNavBtns] = useState({ color: "#000000" });
   const navigator = useNavigate();
+  const screens = useBreakpoint();
 
   let chartOptions = {
-    width: 1400,
+    width: screens.xs?400:1400,
     height: 500,
     priceScale: {
       scaleMargins: {
@@ -107,7 +110,7 @@ export default function BoxPlot() {
               </span>
             </div>
 
-            <div className="color-mode-btn">
+            <div className="color-mode-btn" style={{right:10}}>
               <MdLightMode
                 size={20}
                 className="btn-img"
