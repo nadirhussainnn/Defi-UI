@@ -104,7 +104,7 @@ const CryptoTable = () => {
       sortOrder: sortedInfo.columnKey === "mktCop" ? sortedInfo.order : null,
       ellipsis: true,
       align: "center",
-      responsive: ["lg"],
+      // responsive: ["lg"],
       render: (mktCop) => <span className="table-entry">$ {mktCop}</span>,
     },
     
@@ -113,7 +113,7 @@ const CryptoTable = () => {
       dataIndex: "sevenDays",
       key: "sevenDays",
       align: "center",
-      responsive: ["lg"],
+      // responsive: ["lg"],
       render: (sevenDays) => <Chart index={sevenDays} onClick={displayBoxPlot}/>,
     },
   ];
@@ -157,6 +157,7 @@ const CryptoTable = () => {
       onChange={handleChange}
       rowClassName="highlight-bottom-border"
       sticky
+      scroll={{x:700}}
     />
   );
 };
