@@ -94,7 +94,7 @@ export default function Wallet() {
     <div style={{ textAlign: "center", marginTop: "30px" }}>
       <div style={{ justifyContent: "center" }}>
         <img src={metamask_ic} width={100} height={100} alt="Loading icon" />
-        <h1 className="metamask-heading">METAMASK - </h1>
+        <h1 className="metamask-heading">METAMASK</h1>
         <Button
           style={{
             backgroundColor: "#01aa58",

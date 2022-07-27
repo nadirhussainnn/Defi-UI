@@ -34,10 +34,10 @@ export default function BalanceList({ address }) {
       usd: "1000",
     },
     {
-      symbol: "WETH",
-      name: "Wrapped Ethereum",
+      symbol: "ETH",
+      name: "Ethereum",
       icon: eth_ic,
-      ethers: "2.01",
+      ethers: "1.01",
       usd: "1000",
     },
   ];

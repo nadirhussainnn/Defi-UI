@@ -19,7 +19,6 @@
   --modal-background:'#FFFFFF';
   --modal-background:'#121418';
   --divider-color:'#121418';
-  
 }
 
 .main-div {
@@ -111,4 +110,3 @@
   stroke-width: 6;
   fill: none;    
 }
-
