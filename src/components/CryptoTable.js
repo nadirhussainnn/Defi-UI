@@ -125,9 +125,7 @@ const CryptoTable = () => {
   useEffect(() => {
 
     fetch(
-      `https://api.nomics.com/v1/currencies/ticker?key=${process.env.REACT_APP_CRYPTO_API}`,{
-        mode:'no-cors'
-      }
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd`
     )
       .then((resp) => resp.json())
       .then(async (resp) => {
@@ -136,11 +134,11 @@ const CryptoTable = () => {
             key: index,
             number: index + 1,
             coin: currency.name,
-            price: currency.price,
-            volume: currency["1d"].volume,
-            mktCop: currency["1d"].market_cap_change,
-            logo: currency.logo_url,
-            symbol: currency.symbol,
+            price: currency.current_price,
+            volume: currency.total_volume,
+            mktCop: currency.market_cap_change_24h,
+            logo: currency.image,
+            symbol: currency.symbol.toUpperCase(),
             sevenDays: index,
           });
           return 0;
