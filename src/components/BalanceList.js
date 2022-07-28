@@ -9,11 +9,9 @@ import eth_ic from "../assets/images/ethereum.png";
 import weth_ic from "../assets/images/weth.png";
 
 export default function BalanceList({ address, usd_rate, provider }) {
-  
   const [history, setHistory] = useState(null);
 
   useEffect(() => {
-
     //Get transaction history and balance to this address
     const historyFetcher = async () => {
       let ropstonProvider = new ethers.providers.EtherscanProvider(
@@ -29,7 +27,14 @@ export default function BalanceList({ address, usd_rate, provider }) {
     <>
       {history?.map((item, index) => {
         const eth = ethers.utils.formatEther(item.value._hex);
-        return <Item eth={eth} usd_rate={usd_rate} key={index} />;
+        return (
+          <>
+            {
+              item.to===address?
+              <Item eth={eth} usd_rate={usd_rate} key={index} />:""
+            }
+          </>
+        );
       })}
     </>
   );
