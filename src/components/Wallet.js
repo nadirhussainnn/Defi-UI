@@ -5,17 +5,16 @@
 
 import React, { useState } from "react";
 import { Button, Modal, Space, Divider, Select, Input } from "antd";
-
-import metamask_ic from "../assets/images/metamask.png";
 import { ethers } from "ethers";
 import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
 import { RiMoneyDollarCircleFill, RiUserReceived2Fill } from "react-icons/ri";
 import { toHex, truncateAddress } from "../utils/utils";
 import { networkParams } from "../utils/networks";
-import BalanceList from "./BalanceList";
 import { useFormik } from "formik";
+import BalanceList from "./BalanceList";
 
+import metamask_ic from "../assets/images/metamask.png";
 import "../styles/styles.css";
 
 const { Option } = Select;
@@ -50,11 +49,8 @@ export default function Wallet() {
       return errors;
     },
     onSubmit: async (values) => {
-        //Sign transaction and send amount
-
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = await provider.getSigner();
-        console.log(provider)
+      //Sign transaction and send amount
+      alert(`You requested to send USD ${values.amount} to ${values.receiver}`);
     },
   });
   //Helper functions
@@ -99,10 +95,7 @@ export default function Wallet() {
   }
 
   function buyCrypto() {
-    console.log(`Available balance is ${balance}`);
-  }
-  function sendCrypto() {
-    console.log(`Available balance is ${balance}`);
+    alert(`Available balance is ${balance}`);
   }
 
   function copyAddress() {
@@ -240,14 +233,17 @@ export default function Wallet() {
                     marginTop: "20px",
                   }}
                 >
-                  <Button style={{
-                    backgroundColor: "#01aa58",
-                    border: "none",
-                    color: "white",
-                    fontSize: "16px",
-                    marginLeft: "10px",
-                    borderRadius: "5px",
-                  }} onClick={buyCrypto}>
+                  <Button
+                    style={{
+                      backgroundColor: "#01aa58",
+                      border: "none",
+                      color: "white",
+                      fontSize: "16px",
+                      marginLeft: "10px",
+                      borderRadius: "5px",
+                    }}
+                    onClick={buyCrypto}
+                  >
                     Buy
                   </Button>
                   <Button
@@ -309,7 +305,9 @@ export default function Wallet() {
           centered
           title="Send Money"
           visible={sendCryptoModal}
-          onCancel={()=>{setSendCryptoModal(false)}}
+          onCancel={() => {
+            setSendCryptoModal(false);
+          }}
           width={"30%"}
           footer={null}
           closable={true}
@@ -345,16 +343,26 @@ export default function Wallet() {
                   onBlur={formik.handleBlur}
                 />
               </div>
-              <div style={{ display: "flex", justifyContent:'end', marginRight:'10px' }}>
-                <button type="submit" style={{backgroundColor: "#01aa58",
-                      border: "none",
-                      color: "white",
-                      fontSize: "16px",
-                      marginLeft: "10px",
-                      borderRadius: "5px",
-                      padding:'5px',
-                      cursor:'pointer'
-                      }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "end",
+                  marginRight: "10px",
+                }}
+              >
+                <button
+                  type="submit"
+                  style={{
+                    backgroundColor: "#01aa58",
+                    border: "none",
+                    color: "white",
+                    fontSize: "16px",
+                    marginLeft: "10px",
+                    borderRadius: "5px",
+                    padding: "5px",
+                    cursor: "pointer",
+                  }}
+                >
                   Confirm
                 </button>
               </div>
