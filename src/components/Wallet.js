@@ -8,7 +8,12 @@ import { Button, Modal, Space, Divider, Select, Input } from "antd";
 import { ethers } from "ethers";
 import { MdCircle } from "react-icons/md";
 import { IoMdCopy, IoMdEye, IoMdOpen } from "react-icons/io";
-import { RiMoneyDollarCircleFill, RiUserReceived2Fill } from "react-icons/ri";
+import {
+  RiMoneyDollarCircleFill,
+  RiText,
+  RiTimeFill,
+  RiUserReceived2Fill,
+} from "react-icons/ri";
 import { toHex, truncateAddress } from "../utils/utils";
 import { networkParams } from "../utils/networks";
 import { useFormik } from "formik";
@@ -30,31 +35,9 @@ export default function Wallet() {
   const [usdRate, setUsdRate] = useState(0);
   const [network, setNetwork] = useState();
   const [sendCryptoModal, setSendCryptoModal] = useState(false);
+  const [buyCryptoModal, setBuyCryptoModal] = useState(false);
 
-  const formik = useFormik({
-    initialValues: {
-      receiver: "",
-      amount: "",
-    },
-
-    validate: (values) => {
-      const errors = {};
-
-      if (!values.receiver) {
-        errors.receiver = "Address required";
-      }
-      if (!values.amount) {
-        errors.amount = "Amount required";
-      }
-      return errors;
-    },
-    onSubmit: async (values) => {
-      //Sign transaction and send amount
-      alert(`You requested to send USD ${values.amount} to ${values.receiver}`);
-    },
-  });
   //Helper functions
-
   async function connectWallet() {
     try {
       if (window.ethereum) {
@@ -92,10 +75,6 @@ export default function Wallet() {
     } catch (error) {
       console.error(error);
     }
-  }
-
-  function buyCrypto() {
-    alert(`Available balance is ${balance}`);
   }
 
   function copyAddress() {
@@ -205,10 +184,14 @@ export default function Wallet() {
                 <div style={{ display: "flex" }}>
                   <IoMdCopy
                     size={25}
-                    style={{ marginRight: "10px" }}
+                    style={{ marginRight: "10px", cursor: "pointer" }}
                     onClick={copyAddress}
                   />
-                  <IoMdOpen size={25} onClick={displayNetworkSelectionModal} />
+                  <IoMdOpen
+                    size={25}
+                    style={{ cursor: "pointer" }}
+                    onClick={displayNetworkSelectionModal}
+                  />
                 </div>
               </div>
 
@@ -242,7 +225,9 @@ export default function Wallet() {
                       marginLeft: "10px",
                       borderRadius: "5px",
                     }}
-                    onClick={buyCrypto}
+                    onClick={() => {
+                      setBuyCryptoModal(true);
+                    }}
                   >
                     Buy
                   </Button>
@@ -274,102 +259,263 @@ export default function Wallet() {
           )}
         </Modal>
 
-        <Modal
-          centered
-          title="Select Network"
-          visible={networkModal}
-          onOk={() => setNetworkModal(false)}
-          onCancel={() => setNetworkModal(false)}
-          width={"30%"}
-          footer={null}
-        >
-          <div style={{ justifyContent: "center", display: "flex" }}>
-            <Select
-              placeholder="Select Natwork"
-              onChange={handleNetwork}
-              style={{ width: 250 }}
-            >
-              <Option value="1">Main Net</Option>
-              <Option value="4">Rinkeby</Option>
-              <Option value="3">Ropsten</Option>
-              <Option value="42">Kovan</Option>
-              <Option value="1666600000">Harmony</Option>
-              <Option value="42220">Celo</Option>
-            </Select>
-          </div>
-        </Modal>
+        {/* Change Network */}
 
-        {/* Modal to send assets */}
+        <ChangeNetwork
+          setNetworkModal={setNetworkModal}
+          networkModal={networkModal}
+          handleNetwork={handleNetwork}
+        />
+        {/* Send Asset Crypto Modal */}
+        <SendAssets
+          sendCryptoModal={sendCryptoModal}
+          setSendCryptoModal={setSendCryptoModal}
+        />
+        {/* Buy Crypto Modal */}
 
-        <Modal
-          centered
-          title="Send Money"
-          visible={sendCryptoModal}
-          onCancel={() => {
-            setSendCryptoModal(false);
-          }}
-          width={"30%"}
-          footer={null}
-          closable={true}
-        >
-          <form onSubmit={formik.handleSubmit}>
-            <div style={{ justifyContent: "center" }}>
-              <div
-                style={{
-                  padding: "10px",
-                }}
-              >
-                <Input
-                  size="large"
-                  name="receiver"
-                  placeholder="Enter Receiver public address"
-                  prefix={<RiUserReceived2Fill />}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </div>
-
-              <div
-                style={{
-                  padding: "10px",
-                }}
-              >
-                <Input
-                  size="large"
-                  name="amount"
-                  placeholder="Enter amount in USD"
-                  prefix={<RiMoneyDollarCircleFill />}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "end",
-                  marginRight: "10px",
-                }}
-              >
-                <button
-                  type="submit"
-                  style={{
-                    backgroundColor: "#01aa58",
-                    border: "none",
-                    color: "white",
-                    fontSize: "16px",
-                    marginLeft: "10px",
-                    borderRadius: "5px",
-                    padding: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </form>
-        </Modal>
+        <BuyAssets
+          buyCryptoModal={buyCryptoModal}
+          setBuyCryptoModal={setBuyCryptoModal}
+        />
       </div>
     </div>
   );
 }
+
+const ChangeNetwork = ({ setNetworkModal, networkModal, handleNetwork }) => {
+  return (
+    <Modal
+      centered
+      title="Select Network"
+      visible={networkModal}
+      onOk={() => setNetworkModal(false)}
+      onCancel={() => setNetworkModal(false)}
+      width={"30%"}
+      footer={null}
+    >
+      <div style={{ justifyContent: "center", display: "flex" }}>
+        <Select
+          placeholder="Select Natwork"
+          onChange={handleNetwork}
+          style={{ width: 250 }}
+        >
+          <Option value="1">Main Net</Option>
+          <Option value="4">Rinkeby</Option>
+          <Option value="3">Ropsten</Option>
+          <Option value="42">Kovan</Option>
+          <Option value="1666600000">Harmony</Option>
+          <Option value="42220">Celo</Option>
+        </Select>
+      </div>
+    </Modal>
+  );
+};
+
+const SendAssets = ({ sendCryptoModal, setSendCryptoModal }) => {
+  const formik = useFormik({
+    initialValues: {
+      receiver: "",
+      amount: "",
+    },
+
+    validate: (values) => {
+      const errors = {};
+
+      if (!values.receiver) {
+        errors.receiver = "Address required";
+      }
+      if (!values.amount) {
+        errors.amount = "Amount required";
+      }
+      return errors;
+    },
+    onSubmit: async (values) => {
+      //Sign transaction and send amount
+      alert(`You requested to send USD ${values.amount} to ${values.receiver}`);
+      setSendCryptoModal(false);
+    },
+  });
+
+  return (
+    <Modal
+      centered
+      title="Send Money"
+      visible={sendCryptoModal}
+      onCancel={() => {
+        setSendCryptoModal(false);
+      }}
+      width={"30%"}
+      footer={null}
+      closable={true}
+    >
+      <form onSubmit={formik.handleSubmit}>
+        <div style={{ justifyContent: "center" }}>
+          <div
+            style={{
+              padding: "10px",
+            }}
+          >
+            <Input
+              size="large"
+              name="receiver"
+              placeholder="Enter Receiver public address"
+              prefix={<RiUserReceived2Fill />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </div>
+
+          <div
+            style={{
+              padding: "10px",
+            }}
+          >
+            <Input
+              size="large"
+              name="amount"
+              placeholder="Enter amount in USD"
+              prefix={<RiMoneyDollarCircleFill />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              marginRight: "10px",
+            }}
+          >
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#01aa58",
+                border: "none",
+                color: "white",
+                fontSize: "16px",
+                marginLeft: "10px",
+                borderRadius: "5px",
+                padding: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </form>
+    </Modal>
+  );
+};
+
+const BuyAssets = ({ buyCryptoModal, setBuyCryptoModal }) => {
+  const formik = useFormik({
+    initialValues: {
+      accountNumber: "",
+      expiry: "",
+      cvc: "",
+      amount: "",
+    },
+    onSubmit: async (values) => {
+      //Sign transaction and send amount
+      alert(
+        `You requested to BUY ETH of worth ${values.amount}USD from ${values.accountNumber}`
+      );
+      setBuyCryptoModal(false);
+    },
+  });
+
+  return (
+    <Modal
+      centered
+      title="BUY Crypto Assets"
+      visible={buyCryptoModal}
+      onCancel={() => {
+        setBuyCryptoModal(false);
+      }}
+      width={"30%"}
+      footer={null}
+      closable={true}
+    >
+      <form onSubmit={formik.handleSubmit}>
+        <div style={{ justifyContent: "center" }}>
+          <div
+            style={{
+              padding: "10px",
+            }}
+          >
+            <Input
+              size="large"
+              name="accountNumber"
+              placeholder="Enter VISA account number"
+              prefix={<RiUserReceived2Fill />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </div>
+
+          <div
+            style={{
+              padding: "10px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Input
+              size="large"
+              name="expiry"
+              placeholder="Expiry 06/27"
+              prefix={<RiTimeFill />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              style={{ width: "45%" }}
+            />
+            <Input
+              size="large"
+              name="cvc"
+              placeholder="CVC xxx"
+              prefix={<RiText />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              style={{ width: "45%", right: "0px" }}
+            />
+          </div>
+
+          <div style={{ padding: "10px" }}>
+            <Input
+              size="large"
+              name="amount"
+              placeholder="Enter amount in USD"
+              prefix={<RiMoneyDollarCircleFill />}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "end",
+              marginRight: "10px",
+            }}
+          >
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#01aa58",
+                border: "none",
+                color: "white",
+                fontSize: "16px",
+                marginLeft: "10px",
+                borderRadius: "5px",
+                padding: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      </form>
+    </Modal>
+  );
+};
